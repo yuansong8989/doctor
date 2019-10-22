@@ -32,7 +32,6 @@ public class DanYuanAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         View view1= LayoutInflater.from(context).inflate(R.layout.danyuan,null);
-
         return view1;
     }
 }

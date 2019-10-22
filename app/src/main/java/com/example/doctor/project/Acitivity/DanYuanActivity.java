@@ -1,7 +1,9 @@
 package com.example.doctor.project.Acitivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.doctor.R;
 import com.example.doctor.project.Adapter.DanYuanAdapter;
 
-public class DanYuanActivity extends AppCompatActivity {
+public class DanYuanActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     TextView textView;
     TextView back;
     ListView listView;
@@ -38,5 +40,13 @@ public class DanYuanActivity extends AppCompatActivity {
                 finish();
             }
         });
+        listView.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent1=new Intent(DanYuanActivity.this,DaTiAcitivity.class);
+        intent1.putExtra("title1",getIntent().getStringExtra("title"));
+        startActivity(intent1);
     }
 }

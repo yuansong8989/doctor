@@ -39,6 +39,12 @@
         <activity android:name=".project.Acitivity.LoginActivity">
 
         </activity>
+        <activity android:name=".project.Acitivity.DaTiAcitivity">
+
+        </activity>
+        <activity android:name=".project.Acitivity.DaTiKa">
+
+        </activity>
         <activity android:name=".project.Acitivity.ZhuYe">
 
         </activity>

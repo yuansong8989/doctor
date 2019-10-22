@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.example.doctor.project.ToMeView.SimpleToolbar
+        android:paddingTop="10dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="10dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/simple_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+        <ImageView
+            android:src="@mipmap/bsjt"
+            android:layout_width="20dp"
+            android:layout_height="15dp" />
+        <TextView
+            android:gravity="left"
+            android:id="@+id/txt_left_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="返回"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/txt_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="数学学习"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:visibility="visible"/>
+
+    </com.example.doctor.project.ToMeView.SimpleToolbar>
+
+    <TextView
+        android:id="@+id/kkk"
+        android:background="#FAF3F3"
+        android:layout_below="@+id/simple_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+    <TextView
+        android:id="@+id/zhangjie"
+        android:layout_below="@+id/kkk"
+        android:layout_gravity="center"
+        android:text="第一章：细胞与组织的损伤与修复"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content" />
+<ScrollView
+    android:scrollbars="none"
+    android:layout_below="@+id/zhangjie"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <include
+        android:id="@+id/ly_reset_bar"
+        layout="@layout/xiangzheti" />
+</ScrollView>
+    <LinearLayout
+        android:id="@+id/dibu"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/l1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/n1"
+                android:layout_gravity="center"
+                android:src="@mipmap/biji"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <TextView
+                android:id="@+id/t1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="笔记" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l3"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/n3"
+                android:layout_gravity="center"
+                android:src="@mipmap/shoucang"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <TextView
+                android:id="@+id/t3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="收藏" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/jiucuo"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/n4"
+                android:layout_gravity="center"
+                android:src="@mipmap/jiucuo"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <TextView
+                android:id="@+id/t4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="纠错" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/dibu4"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/n5"
+                android:layout_gravity="center"
+                android:src="@mipmap/datika"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <TextView
+                android:id="@+id/t5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="答题卡" />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/bbb"
+       android:layout_above="@+id/dibu"
+        android:layout_marginBottom="8dp"
+        android:background="#DFDCDC"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+    <LinearLayout
+        android:id="@+id/ppp"
+        android:layout_above="@+id/bbb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/timebt"
+            android:textColor="@color/colorPrimary"
+            android:text="剩余：0小时22分钟53秒"
+            android:background="@drawable/bontton3"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <Button
+
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:paddingTop="2dp"
+            android:text="提交试卷"
+            android:background="@drawable/bontton4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:layout_above="@+id/ppp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="1/21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>
