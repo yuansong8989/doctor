@@ -25,7 +25,8 @@ public class DaTiKa extends AppCompatActivity {
     GridView gridView;
     Button chongzuo;
     DaTiaAdapter daTiaAdapter;
-    ArrayList<Integer> integers=new ArrayList<>();
+    ArrayList<Integer> integers = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (getSupportActionBar() != null) {
@@ -36,12 +37,13 @@ public class DaTiKa extends AppCompatActivity {
         setContentView(R.layout.datika);
         intiview();
     }
-    public  void intiview(){
-        txt_left_title=(TextView)findViewById(R.id.txt_left_title);
-        gridView=(GridView)findViewById(R.id.gridka);
-        daTiaAdapter=new DaTiaAdapter(this);
+
+    public void intiview() {
+        txt_left_title = (TextView) findViewById(R.id.txt_left_title);
+        gridView = (GridView) findViewById(R.id.gridka);
+        daTiaAdapter = new DaTiaAdapter(this);
         gridView.setAdapter(daTiaAdapter);
-        chongzuo=(Button)findViewById(R.id.chongzuo) ;
+        chongzuo = (Button) findViewById(R.id.chongzuo);
         daTiaAdapter.setList(integers);
         daTiaAdapter.notifyDataSetChanged();
         txt_left_title.setOnClickListener(new View.OnClickListener() {
