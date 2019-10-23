@@ -75,19 +75,19 @@ public class DaTiKa extends AppCompatActivity {
         });
     }
     private void congzuo() {
-
             SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "提示", "是否需要重做？", new SYSDiaLogUtils.ConfirmDialogListener() {
                 @Override
                 public void onClickButton(boolean clickLeft, boolean clickRight) {
                     if (clickLeft) {
                     } else if (clickRight) {
-                        //提交
+                        //重做
                         EventBus.getDefault().post(new Finish());
                         Intent intent1=new Intent(DaTiKa.this,DaTiAcitivity.class);
                         startActivity(intent1);
+                        finish();
                     }
                 }
             });
         }
-
+        //提交答案 返回结果
 }

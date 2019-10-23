@@ -63,8 +63,5 @@ public class DaTiaAdapter extends BaseAdapter {
     }
 public void setList(ArrayList<Integer> list1){
         list.addAll(list1);
-        for(int i=0;i<list1.size();i++){
-            System.out.println(list1.get(i));
-        }
 }
 }

@@ -22,11 +22,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.doctor.R;
 import com.example.doctor.project.Adapter.DanYuanAdapter;
+import com.example.doctor.project.entity.DaTiRqe;
 import com.example.doctor.project.entity.Event;
 import com.example.doctor.project.entity.Finish;
 import com.example.doctor.project.entity.Problem;
@@ -39,6 +43,8 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -78,8 +84,8 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     LinearLayout xia;
     LinearLayout shang;
     protected static final float FLIP_DISTANCE = 50;
-    GestureDetector gestureDetector;
-    long time = 2500;
+
+    long time = 10;
     boolean shijian = true;
     private Handler handler;
     Button timebt;
@@ -100,6 +106,9 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 1) {
                     timebt.setText(formatLongToTimeStr(time--));
+                    if(time==0){
+                        mustSubmit();
+                    }
                 }
                 if (msg.what == 0) {
                     SYSDiaLogUtils.dismissProgress();
@@ -112,8 +121,6 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         };
         //初始化答题时间
         startTime();
-        huaDong();
-
         //左右滑动监听
     }
 
@@ -161,68 +168,6 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         xia.setOnClickListener(this);
     }
 
-    public void huaDong() {
-        gestureDetector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            /**
-             *
-             * e1 The first down motion event that started the fling. e2 The
-             * move motion event that triggered the current onFling.
-             */
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (e1.getX() - e2.getX() > FLIP_DISTANCE) {
-
-                    return true;
-                }
-                if (e2.getX() - e1.getX() > FLIP_DISTANCE) {
-                    return true;
-                }
-                if (e1.getY() - e2.getY() > FLIP_DISTANCE) {
-                    System.out.println("向上滑动");
-                    return true;
-                }
-                if (e2.getY() - e1.getY() > FLIP_DISTANCE) {
-                    System.out.println("向下滑动");
-                    return true;
-                }
-
-                System.out.println("其他");
-
-                return false;
-            }
-
-            @Override
-            public boolean onDown(MotionEvent e) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-        });
-    }
 
     public void startTime() {
         new Thread() {
@@ -260,10 +205,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         return strtime;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -556,11 +498,34 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                     if (clickLeft) {
                     } else if (clickRight) {
                         //提交
-                        System.out.println("问题的答案" + gson.toJson(answerList).toString());
+                        rtShuju();
+
+
                     }
                 }
             });
         }
     }
+    public void  rtShuju(){
+                DaTiRqe daTiRqe=new DaTiRqe();
+        daTiRqe.setList(answerList);
+        String url="http://106.53.9.58:8080/default/hospital/com.primeton.eos.hospital.check.biz.ext";
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST, url, gson.toJson(daTiRqe).toString(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        System.out.println(response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
+            }
+        });
+        requestQueue.add(jsonRequest);
+    }
+    public  void mustSubmit(){
+        SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "時間到，交卷...", false, null);
+    }
 }
