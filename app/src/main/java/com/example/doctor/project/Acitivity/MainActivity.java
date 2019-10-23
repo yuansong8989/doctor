@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ZhuYe.class);
                 finish();
                 startActivity(intent);
-                dialog.dismiss();
+                SYSDiaLogUtils.dismissProgress();
             }
             if (msg.what == 1) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -67,11 +67,12 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        processThread();
+//        processThread();
         //首先先判断是否之前登录 如果没有登录 跳转到登录 如果登录勒 自动登录
         if (Remember.getString(RemenberString.loginuser, RemenberString.login, "", MainActivity.this).equals("123456")) {
             //转圈圈登录
-            dialog.show();
+            SYSDiaLogUtils.showProgressDialog(MainActivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "登陆中...", false, null);
+
 //            raitThe();
             enterZhuYe();
         } else {

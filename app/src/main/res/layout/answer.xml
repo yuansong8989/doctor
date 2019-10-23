@@ -54,14 +54,15 @@
         android:id="@+id/zhangjie"
         android:layout_below="@+id/kkk"
         android:layout_gravity="center"
+        android:textSize="@dimen/font_16"
         android:text="第一章：细胞与组织的损伤与修复"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="18dp" />
 <ScrollView
     android:scrollbars="none"
     android:layout_below="@+id/zhangjie"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <include
         android:id="@+id/ly_reset_bar"
@@ -74,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/l1"
+            android:id="@+id/pinglun"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -90,11 +91,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="笔记" />
+                android:text="评论" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/l3"
+            android:id="@+id/shang"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_width="0dp"
@@ -103,7 +104,7 @@
             <ImageView
                 android:id="@+id/n3"
                 android:layout_gravity="center"
-                android:src="@mipmap/shoucang"
+                android:src="@mipmap/shang"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
             <TextView
@@ -111,10 +112,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="收藏" />
+                android:text="上一题" />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/jiucuo"
+            android:id="@+id/xia"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_width="0dp"
@@ -123,7 +124,7 @@
             <ImageView
                 android:id="@+id/n4"
                 android:layout_gravity="center"
-                android:src="@mipmap/jiucuo"
+                android:src="@mipmap/xia"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
             <TextView
@@ -131,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="纠错" />
+                android:text="下一题" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/dibu4"
@@ -191,6 +192,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/yeshu"
             android:text="1/21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

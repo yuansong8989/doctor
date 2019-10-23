@@ -1,6 +1,7 @@
 package com.example.doctor.project.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,16 @@ import java.util.List;
 
 public class DaTiaAdapter extends BaseAdapter {
     Context context;
+    Integer number;
     ArrayList<Integer> list=new ArrayList<>();
-    public DaTiaAdapter(Context context1) {
+    public DaTiaAdapter(Context context1,Integer integer) {
+        number=integer;
         context = context1;
     }
 
     @Override
     public int getCount() {
-        return 110;
+        return number;
     }
 
     @Override
@@ -41,18 +44,21 @@ public class DaTiaAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
         View view1 = LayoutInflater.from(context).inflate(R.layout.ka, null);
         TextView textView = (TextView) view1.findViewById(R.id.shuzi);
-        if(list.size()!=0){
-            for(int j=0;j<list.size();j++){
-                if(list.get(j)==i){
-                    textView.setBackground(context.getResources().getDrawable(R.drawable.bontton1));
-                    list.remove(j);
+            textView.setText(String.valueOf(i+1));
+            if(list.size()!=0){
+                for(int j=0;j<list.size();j++){
+                    if(list.get(j)==i+1){
+                        textView.setTextColor(Color.WHITE);
+                        textView.setBackground(context.getResources().getDrawable(R.drawable.dati));
+                        list.remove(j);
+                    }
+                    break;
                 }
-                break;
-            }
+
         }
+
         return view1;
     }
 public void setList(ArrayList<Integer> list1){

@@ -161,7 +161,6 @@ public class ZhuYe extends SupportActivity implements  View.OnClickListener {
         switch (view.getId()){
             case R.id.l1:
                 position=1;
-
                 EventBus.getDefault().post(new Event());
                 startWithPop(Support_Fr_1.newInstance());
                 break;
