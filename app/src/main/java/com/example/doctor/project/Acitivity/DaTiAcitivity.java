@@ -68,10 +68,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DaTiAcitivity extends AppCompatActivity implements View.OnClickListener {
-    int zhuangtai=0; //0可以代表可做 1代表不能做
+    int zhuangtai = 0; //0可以代表可做 1代表不能做
     TextView textView;
     int frist = 0;
-    boolean jjj=false;
+    boolean jjj = false;
     TextView success;
     Result1 result1;
     MoveImageView move;
@@ -107,13 +107,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     LinearLayout xia;
     LinearLayout shang;
     protected static final float FLIP_DISTANCE = 50;
-    long frirstrime=0;
+    long frirstrime = 0;
     long time = 2000;
     boolean shijian = true;
     private Handler handler;
     Button timebt;
-    int tupian=0;
+    int tupian = 0;
     TextView kkk;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (getSupportActionBar() != null) {
@@ -125,7 +126,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
 
         EventBus.getDefault().register(this);
         intiview();
-        if(zhuangtai==1){
+        if (zhuangtai == 1) {
             ll1.setEnabled(false);
             ll2.setEnabled(false);
             ll3.setEnabled(false);
@@ -135,7 +136,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
             submit.setBackground(getResources().getDrawable(R.drawable.jinyong));
             kkk.setText("已经完成");
             kkk.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        }else{
+        } else {
             //初始化答题时间
             startTime();
         }
@@ -173,11 +174,11 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void intiview() {
-        move=(MoveImageView)findViewById(R.id.move);
-        geini=(LinearLayout)findViewById(R.id.geini);
+        move = (MoveImageView) findViewById(R.id.move);
+        geini = (LinearLayout) findViewById(R.id.geini);
         geini.setVisibility(View.GONE);
-        kkk=(TextView)findViewById(R.id.kkk);
-        success=(TextView)findViewById(R.id.success);
+        kkk = (TextView) findViewById(R.id.kkk);
+        success = (TextView) findViewById(R.id.success);
         pinglun = (LinearLayout) findViewById(R.id.pinglun);
         titletu = (TextView) findViewById(R.id.titletu);
         yeshu = (TextView) findViewById(R.id.yeshu);
@@ -283,16 +284,17 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.submit:
-
-                    submit();
+                submit.setEnabled(false);
+                submit();
                 break;
             case R.id.dibu4:
-                if(zhuangtai==0){
+                if (zhuangtai == 0) {
+
                     Intent intent1 = new Intent(DaTiAcitivity.this, DaTiKa.class);
                     intent1.putExtra("number", list.size());
                     intent1.putIntegerArrayListExtra("shuzi", removeDuplicate(getA()));
                     startActivity(intent1);
-                }else {
+                } else {
                     submit();
                 }
                 break;
@@ -432,6 +434,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
 
     public ArrayList<Integer> getA() {
         for (Answer answer : answerList) {
+            if(!answer.getAnswer().equals(""))
             a.add(answer.getId());
         }
         return a;
@@ -541,7 +544,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void show() {
-        if(zhuangtai==0){
+        if (zhuangtai == 0) {
             SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "你未完成考试", "确定要退出考试？", new SYSDiaLogUtils.ConfirmDialogListener() {
                 @Override
                 public void onClickButton(boolean clickLeft, boolean clickRight) {
@@ -552,7 +555,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                     }
                 }
             });
-        }else {
+        } else {
             SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "你确定不在看看吗", "确定？", new SYSDiaLogUtils.ConfirmDialogListener() {
                 @Override
                 public void onClickButton(boolean clickLeft, boolean clickRight) {
@@ -580,8 +583,8 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         } else {
-                        //提交
-                        rtShuju();
+            //提交
+            rtShuju();
 
         }
     }
@@ -674,16 +677,16 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         result1 = intentShi.getResult1();
         handler.sendEmptyMessage(2);
     }
+
     //恢复
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ddada(HuiFu huiFu) {
-        jjj=true;
-        zhuangtai=1;
+        jjj = true;
+        zhuangtai = 1;
         geini.setVisibility(View.VISIBLE);
         ll1.setEnabled(false);
         ll2.setEnabled(false);
         ll3.setEnabled(false);
-        submit.setEnabled(false);
         ll4.setEnabled(false);
         timebt.setText(formatLongToTimeStr(frirstrime));
         submit.setBackground(getResources().getDrawable(R.drawable.jinyong));
@@ -691,14 +694,15 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         kkk.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         tupain();
     }
-private  void tupain(){
-        if(jjj){
-            if(result1.getList().get(frist).getDaan().equals("正确")){
+
+    private void tupain() {
+        if (jjj) {
+            if (result1.getList().get(frist).getDaan().equals("正确")) {
                 move.setBackgroundResource(R.mipmap.dui);
-            }else {
+            } else {
                 move.setBackgroundResource(R.mipmap.cuo);
             }
         }
-}
+    }
 
 }

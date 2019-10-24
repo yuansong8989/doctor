@@ -46,6 +46,7 @@
     </com.example.doctor.project.ToMeView.SimpleToolbar>
 
         <androidx.cardview.widget.CardView
+            android:background="#fff"
             android:id="@+id/card1"
             android:layout_weight="6"
             android:layout_marginTop="2dp"
