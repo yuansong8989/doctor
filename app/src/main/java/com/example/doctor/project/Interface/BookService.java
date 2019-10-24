@@ -1,5 +1,7 @@
 package com.example.doctor.project.Interface;
 
+import com.example.doctor.project.entity.DaTiRqe;
+import com.example.doctor.project.entity.Result1;
 import com.example.doctor.project.entity.User;
 import com.example.doctor.project.entity.XuanZhe;
 
@@ -25,4 +27,6 @@ public interface BookService {
     Call<List<XuanZhe>> getYuWen();
     @POST("jiancha")
     Call<List<String>> getAnswer(@Body User user);
+    @POST("check")
+    Call<Result1>check(@Body DaTiRqe daTiRqe);
 }

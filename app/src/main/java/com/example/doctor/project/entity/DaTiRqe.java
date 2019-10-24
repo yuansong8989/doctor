@@ -1,6 +1,5 @@
 package com.example.doctor.project.entity;
 
-import com.example.doctor.project.Acitivity.Answer;
 
 import java.util.List;
 

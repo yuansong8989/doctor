@@ -1,4 +1,4 @@
-package com.example.doctor.project.Acitivity;
+package com.example.doctor.project.entity;
 
 public class Answer {
     private Integer id;

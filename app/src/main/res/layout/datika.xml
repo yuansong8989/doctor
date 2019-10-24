@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     >
@@ -45,10 +44,96 @@
             android:visibility="visible"/>
 
     </com.example.doctor.project.ToMeView.SimpleToolbar>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bontton"
+        android:gravity="center"
+        android:id="@+id/showrs"
+        android:layout_below="@+id/simple_toolbar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_gravity="center"
+                android:text="成绩单"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="做题时间"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50s" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+
+                android:text="正确数"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/zhengque"
+
+                android:text="5题"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="错误数"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/cuowu"
+                android:text="10题"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+
+                android:text="总分"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/zongfen"
+                android:text="50分"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
     <GridView
         android:scrollbars="none"
-        android:layout_below="@+id/simple_toolbar"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/showrs"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:id="@+id/gridka"
@@ -67,7 +152,7 @@
         <Button
             android:textColor="#fff"
             android:layout_weight="1"
-            android:text="提交试卷"
+            android:text="问题反馈"
             android:background="@drawable/bontton4"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />

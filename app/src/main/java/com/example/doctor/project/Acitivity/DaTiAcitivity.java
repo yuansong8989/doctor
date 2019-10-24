@@ -3,22 +3,28 @@ package com.example.doctor.project.Acitivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,12 +36,18 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.doctor.R;
 import com.example.doctor.project.Adapter.DanYuanAdapter;
+import com.example.doctor.project.Interface.BookService;
+import com.example.doctor.project.ToMeView.MoveImageView;
+import com.example.doctor.project.entity.Answer;
 import com.example.doctor.project.entity.DaTiRqe;
 import com.example.doctor.project.entity.Event;
 import com.example.doctor.project.entity.Finish;
+import com.example.doctor.project.entity.HuiFu;
+import com.example.doctor.project.entity.IntentShi;
 import com.example.doctor.project.entity.Problem;
 import com.example.doctor.project.entity.ProblemAll;
 import com.example.doctor.project.entity.Result;
+import com.example.doctor.project.entity.Result1;
 import com.example.doctor.project.entity.TiaoZhuan;
 import com.fingerth.supdialogutils.SYSDiaLogUtils;
 import com.google.gson.Gson;
@@ -50,9 +62,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class DaTiAcitivity extends AppCompatActivity implements View.OnClickListener {
+    int zhuangtai=0; //0可以代表可做 1代表不能做
     TextView textView;
     int frist = 0;
+    boolean jjj=false;
+    TextView success;
+    Result1 result1;
+    MoveImageView move;
     List<Answer> answerList = new ArrayList<>();
     ProblemAll problemAll;
     TextView danan1;
@@ -80,16 +102,18 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     TextView wenti;
     TextView back;
     LinearLayout dibu4;
+    LinearLayout geini;
     Button submit;
     LinearLayout xia;
     LinearLayout shang;
     protected static final float FLIP_DISTANCE = 50;
-
-    long time = 10;
+    long frirstrime=0;
+    long time = 2000;
     boolean shijian = true;
     private Handler handler;
     Button timebt;
-
+    int tupian=0;
+    TextView kkk;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (getSupportActionBar() != null) {
@@ -97,16 +121,39 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.answer);
+        //代表已经做了
+
         EventBus.getDefault().register(this);
         intiview();
+        if(zhuangtai==1){
+            ll1.setEnabled(false);
+            ll2.setEnabled(false);
+            ll3.setEnabled(false);
+            submit.setEnabled(false);
+            ll4.setEnabled(false);
+            timebt.setText(formatLongToTimeStr(frirstrime));
+            submit.setBackground(getResources().getDrawable(R.drawable.jinyong));
+            kkk.setText("已经完成");
+            kkk.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }else{
+            //初始化答题时间
+            startTime();
+        }
 //初始化答题页面
         Allshuju();
         handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
+                if (msg.what == 2) {
+                    SYSDiaLogUtils.dismissProgress();
+                    Intent intent1 = new Intent(DaTiAcitivity.this, DaTiKa.class);
+                    intent1.putExtra("result", result1);
+                    startActivity(intent1);
+                    //这里跳转答题卡页面显示全部的 需要把值全部传到答题卡中
+                }
                 if (msg.what == 1) {
                     timebt.setText(formatLongToTimeStr(time--));
-                    if(time==0){
+                    if (time == 0) {
                         mustSubmit();
                     }
                 }
@@ -115,17 +162,23 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                     list.addAll(result.getRes());
                     problem = list.get(frist);
                     startView(problem);
+                    chushi(list, answerList);
                 }
                 super.handleMessage(msg);
             }
         };
-        //初始化答题时间
-        startTime();
+
+
         //左右滑动监听
     }
 
     private void intiview() {
-        pinglun=(LinearLayout)findViewById(R.id.pinglun);
+        move=(MoveImageView)findViewById(R.id.move);
+        geini=(LinearLayout)findViewById(R.id.geini);
+        geini.setVisibility(View.GONE);
+        kkk=(TextView)findViewById(R.id.kkk);
+        success=(TextView)findViewById(R.id.success);
+        pinglun = (LinearLayout) findViewById(R.id.pinglun);
         titletu = (TextView) findViewById(R.id.titletu);
         yeshu = (TextView) findViewById(R.id.yeshu);
         shang = (LinearLayout) findViewById(R.id.shang);
@@ -206,7 +259,6 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -217,6 +269,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                     problem = list.get(++frist);
                     startView(problem);
                     panduan();
+                    tupain();
                 }
                 break;
             case R.id.shang:
@@ -226,17 +279,22 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                     problem = list.get(--frist);
                     startView(problem);
                     panduan();
+                    tupain();
                 }
                 break;
             case R.id.submit:
-                submit();
 
+                    submit();
                 break;
             case R.id.dibu4:
-                Intent intent1 = new Intent(DaTiAcitivity.this, DaTiKa.class);
-                intent1.putExtra("number", list.size());
-                intent1.putIntegerArrayListExtra("shuzi", removeDuplicate(getA()));
-                startActivity(intent1);
+                if(zhuangtai==0){
+                    Intent intent1 = new Intent(DaTiAcitivity.this, DaTiKa.class);
+                    intent1.putExtra("number", list.size());
+                    intent1.putIntegerArrayListExtra("shuzi", removeDuplicate(getA()));
+                    startActivity(intent1);
+                }else {
+                    submit();
+                }
                 break;
             case R.id.ll1:
                 if (chazzhao()) {
@@ -351,6 +409,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void startView(Problem problem) {
+        success.setText(problem.getSuccess());
         wenti.setText(problem.getProblemtitle());
         danan1.setText(problem.getChoicea());
         danan2.setText(problem.getChoiceb());
@@ -417,10 +476,12 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         panduan();
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setOut(Finish finish) {
         this.finish();
     }
+
     public void panduan() {
         boolean a = false;
         Answer answer1 = new Answer();
@@ -465,6 +526,9 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                     dananc.setImageResource(R.mipmap.ccc);
                     danana.setImageResource(R.mipmap.aaa);
                     break;
+                default:
+                    quxiaodf();
+
             }
         } else {
             quxiaodf();
@@ -477,55 +541,164 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void show() {
-        SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "你未完成考试", "确定要退出考试？", new SYSDiaLogUtils.ConfirmDialogListener() {
-            @Override
-            public void onClickButton(boolean clickLeft, boolean clickRight) {
-                if (clickLeft) {
-                    Toast.makeText(DaTiAcitivity.this, "考试继续", Toast.LENGTH_SHORT).show();
-                } else if (clickRight) {
-                    finish();
+        if(zhuangtai==0){
+            SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "你未完成考试", "确定要退出考试？", new SYSDiaLogUtils.ConfirmDialogListener() {
+                @Override
+                public void onClickButton(boolean clickLeft, boolean clickRight) {
+                    if (clickLeft) {
+                        Toast.makeText(DaTiAcitivity.this, "考试继续", Toast.LENGTH_SHORT).show();
+                    } else if (clickRight) {
+                        finish();
+                    }
                 }
-            }
-        });
+            });
+        }else {
+            SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "你确定不在看看吗", "确定？", new SYSDiaLogUtils.ConfirmDialogListener() {
+                @Override
+                public void onClickButton(boolean clickLeft, boolean clickRight) {
+                    if (clickLeft) {
+                        Toast.makeText(DaTiAcitivity.this, "加油", Toast.LENGTH_SHORT).show();
+                    } else if (clickRight) {
+                        finish();
+                    }
+                }
+            });
+        }
+
     }
+
     private void submit() {
-        if(answerList.size()!=list.size()){
-            SYSDiaLogUtils.showInfoDialog(this, "提示", "你还有未完成的习题！", "确定", false);
-        }else{
-            SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "完成", "确定提交试卷？", new SYSDiaLogUtils.ConfirmDialogListener() {
+        if (answerList.size() != list.size()) {
+            SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "警告", "你还有未完成的习题，确定提交？", new SYSDiaLogUtils.ConfirmDialogListener() {
                 @Override
                 public void onClickButton(boolean clickLeft, boolean clickRight) {
                     if (clickLeft) {
                     } else if (clickRight) {
                         //提交
                         rtShuju();
-
-
                     }
                 }
             });
+        } else {
+                        //提交
+                        rtShuju();
+
         }
     }
-    public void  rtShuju(){
-                DaTiRqe daTiRqe=new DaTiRqe();
-        daTiRqe.setList(answerList);
-        String url="http://106.53.9.58:8080/default/hospital/com.primeton.eos.hospital.check.biz.ext";
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST, url, gson.toJson(daTiRqe).toString(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        System.out.println(response.toString());
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
+    public void rtShuju() {
+        SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "请稍后...", false, null);
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+
+                }
+                super.run();
+                DaTiRqe daTiRqe = new DaTiRqe();
+                daTiRqe.setList(answerList);
+                String url = "http://106.53.9.58:8761/check";
+                RequestQueue requestQueue = Volley.newRequestQueue(DaTiAcitivity.this);
+                System.out.println(gson.toJson(daTiRqe));
+                JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST, url, gson.toJson(daTiRqe).toString(),
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                EventBus.getDefault().post(new IntentShi(gson.fromJson(response.toString(), Result1.class)));
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+                requestQueue.add(jsonRequest);
             }
-        });
-        requestQueue.add(jsonRequest);
+        }.start();
+
     }
-    public  void mustSubmit(){
-        SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "時間到，交卷...", false, null);
+
+    public void mustSubmit() {
+        SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "时间到，交卷...", false, null);
     }
+
+    //初始化
+    public void chushi(List<Problem> problems, List<Answer> answers) {
+        for (Problem problem : problems) {
+            Answer answer = new Answer();
+            answer.setId(problem.getId());
+            answer.setAnswer("");
+            answers.add(answer);
+        }
+    }
+
+    public void getdaan() {
+        new Thread() {
+            @Override
+            public void run() {
+                Retrofit retrofit1 = new Retrofit.Builder()
+                        .baseUrl("http://10.9.5.9:8761/")//设置网络请求url，后面一段写在网络请求接口里面
+                        .addConverterFactory(GsonConverterFactory.create())//添加Gson支持，然后Retrofit就会使用Gson将响应体（api接口的Take）转换我们想要的类型。
+                        .build();
+                BookService bookService1 = retrofit1.create(BookService.class);
+                DaTiRqe daTiRqe = new DaTiRqe();
+                daTiRqe.setList(answerList);
+                Call<Result1> call = bookService1.check(daTiRqe);
+                call.enqueue(new Callback<Result1>() {
+                    @Override
+                    public void onResponse(Call<Result1> call, retrofit2.Response<Result1> response) {
+                        Result1 result1 = response.body();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Result1> call, Throwable t) {
+
+                    }
+                });
+            }
+        }.start();
+    }
+
+    //初始化答案提交框
+    //赋值
+    public void setValue(Result1 result) {
+        result1 = result;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void dhdj(IntentShi intentShi) {
+        result1 = intentShi.getResult1();
+        handler.sendEmptyMessage(2);
+    }
+    //恢复
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ddada(HuiFu huiFu) {
+        jjj=true;
+        zhuangtai=1;
+        geini.setVisibility(View.VISIBLE);
+        ll1.setEnabled(false);
+        ll2.setEnabled(false);
+        ll3.setEnabled(false);
+        submit.setEnabled(false);
+        ll4.setEnabled(false);
+        timebt.setText(formatLongToTimeStr(frirstrime));
+        submit.setBackground(getResources().getDrawable(R.drawable.jinyong));
+        kkk.setText("已经完成");
+        kkk.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        tupain();
+    }
+private  void tupain(){
+        if(jjj){
+            if(result1.getList().get(frist).getDaan().equals("正确")){
+                move.setBackgroundResource(R.mipmap.dui);
+            }else {
+                move.setBackgroundResource(R.mipmap.cuo);
+            }
+        }
+}
+
 }

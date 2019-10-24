@@ -43,31 +43,48 @@
             android:visibility="visible"/>
 
     </com.example.doctor.project.ToMeView.SimpleToolbar>
-
+<LinearLayout
+    android:id="@+id/koko"
+    android:orientation="horizontal"
+    android:layout_below="@+id/simple_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <TextView
+        android:layout_marginTop="1dp"
+        android:text=""
+        android:textColor="#fff"
         android:id="@+id/kkk"
+        android:gravity="center"
         android:background="#FAF3F3"
-        android:layout_below="@+id/simple_toolbar"
         android:layout_width="match_parent"
         android:layout_height="20dp" />
+</LinearLayout>
     <TextView
         android:id="@+id/zhangjie"
-        android:layout_below="@+id/kkk"
+        android:layout_below="@+id/koko"
         android:layout_gravity="center"
         android:textSize="@dimen/font_16"
         android:text="第一章：细胞与组织的损伤与修复"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_height="18dp" />
-<ScrollView
-    android:scrollbars="none"
-    android:layout_below="@+id/zhangjie"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <include
-        android:id="@+id/ly_reset_bar"
-        layout="@layout/xiangzheti" />
-</ScrollView>
+    <FrameLayout
+        android:layout_below="@+id/zhangjie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/ly_reset_bar"
+            layout="@layout/xiangzheti" />
+        <!--<ImageView-->
+            <!--android:src="@mipmap/dui"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+        <com.example.doctor.project.ToMeView.MoveImageView
+            android:id="@+id/move"
+            android:layout_width="40dp"
+            android:layout_gravity="center"
+            android:layout_height="40dp" />
+    </FrameLayout>
     <LinearLayout
         android:id="@+id/dibu"
         android:layout_alignParentBottom="true"
