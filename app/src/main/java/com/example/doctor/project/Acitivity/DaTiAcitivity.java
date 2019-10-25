@@ -48,6 +48,7 @@ import com.example.doctor.project.entity.Problem;
 import com.example.doctor.project.entity.ProblemAll;
 import com.example.doctor.project.entity.Result;
 import com.example.doctor.project.entity.Result1;
+import com.example.doctor.project.entity.Subject;
 import com.example.doctor.project.entity.TiaoZhuan;
 import com.fingerth.supdialogutils.SYSDiaLogUtils;
 import com.google.gson.Gson;
@@ -90,7 +91,8 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     ImageView n3;
     ImageView n4;
     ImageView n5;
-    Result result;
+    Result result=new Result();
+    Subject subject=new Subject();
     LinearLayout ll2;
     TextView jiexi;
     LinearLayout ll3;
@@ -122,7 +124,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     Button timebt;
     int tupian = 0;
     TextView kkk;
-
+    int id3;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (getSupportActionBar() != null) {
@@ -131,7 +133,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.answer);
         //代表已经做了
-
+        id3=getIntent().getIntExtra("id5",0);//得到的章节id 把它显示出来
         EventBus.getDefault().register(this);
         intiview();
         anxia();
@@ -169,7 +171,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 }
                 if (msg.what == 0) {
                     SYSDiaLogUtils.dismissProgress();
-                    list.addAll(result.getRes());
+                    list.addAll(subject.getProblems());
                     problem = list.get(frist);
                     startView(problem);
                     chushi(list, answerList);
@@ -460,37 +462,66 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         }
         return a;
     }
-
-    private void Allshuju() {
-        SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "加载中...", false, null);
-        new Thread() {
+public void Allshuju(){
+    SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "请稍后...", false, null);
+    new Thread(){
             @Override
             public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                RequestQueue queue = Volley.newRequestQueue(DaTiAcitivity.this);
-                String url = "http://106.53.9.58:8080/default/hospital/com.primeton.eos.hospital.query.biz.ext";
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                        new com.android.volley.Response.Listener<String>() {
+                System.out.println("s输了"+id3);
+                com.example.doctor.project.entity.Request request=new com.example.doctor.project.entity.Request();
+                request.setId(id3);
+                String url = "http://106.53.9.58:8761/alltitle";
+                RequestQueue requestQueue = Volley.newRequestQueue(DaTiAcitivity.this);
+                JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST, url, gson.toJson(request).toString(),
+                        new Response.Listener<JSONObject>() {
                             @Override
-                            public void onResponse(String response) {
+                            public void onResponse(JSONObject response) {
                                 System.out.println(response.toString());
-                                result = gson.fromJson(response.toString(), Result.class);
+                                subject=gson.fromJson(response.toString(), Subject.class);
                                 handler.sendEmptyMessage(0);
                             }
-                        }, new com.android.volley.Response.ErrorListener() {
+                        }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
                     }
                 });
-                queue.add(stringRequest);
+                requestQueue.add(jsonRequest);
             }
         }.start();
-    }
+
+        }
+
+//    private void Allshuju() {
+//        SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "加载中...", false, null);
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                RequestQueue queue = Volley.newRequestQueue(DaTiAcitivity.this);
+//                String url = "http://106.53.9.58:8080/default/hospital/com.primeton.eos.hospital.query.biz.ext";
+//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                        new com.android.volley.Response.Listener<String>() {
+//                            @Override
+//                            public void onResponse(String response) {
+//                                System.out.println(response.toString());
+//                                result = gson.fromJson(response.toString(), Result.class);
+//                                handler.sendEmptyMessage(0);
+//                            }
+//                        }, new com.android.volley.Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                });
+//                queue.add(stringRequest);
+//            }
+//        }.start();
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void change(TiaoZhuan tiaoZhuan) {

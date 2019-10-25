@@ -106,11 +106,6 @@ public class ZhuYe extends SupportActivity implements  View.OnClickListener {
         l5.setOnClickListener(this);
         setFristBg(imageView1,textView1,R.mipmap.n11,Color.parseColor("#1296db"));
     }
-
-
-
-
-
     @Override
     protected void onStart() {
         super.onStart();

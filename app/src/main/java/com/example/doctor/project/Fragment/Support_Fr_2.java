@@ -52,6 +52,7 @@ public class Support_Fr_2 extends SupportFragment implements View.OnClickListene
     Button button2;
     Button button3;
     Button button4;
+
     TitleAdapter titleAdapter;
     Gson gson=new Gson();
 Subject subject=new Subject();
@@ -61,29 +62,17 @@ Subject subject=new Subject();
         fragment.setArguments(args);
         return fragment;
     }
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if(msg.what==0){
-//                String a=msg.getData().getString("danyuan");
-//                subject=gson.fromJson(a,Subject.class);
-                SYSDiaLogUtils.dismissProgress();
-            }
-            super.handleMessage(msg);
-        }
-    };
+    Handler handler;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
+
         View view = inflater.inflate(R.layout.fragtwo, null);
         listView = (ListView) view.findViewById(R.id.titlelist);
         intinView(view);
         button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton1));
 //        Button button=(Button)view.findViewById(R.id.bt3);
-        titleAdapter = new TitleAdapter(getActivity(),subject.getSubject1());
-        listView.setAdapter(titleAdapter);
         listView.setOnItemClickListener(this);
         return view;
     }
@@ -107,14 +96,16 @@ Subject subject=new Subject();
                 button2.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button3.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button4.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
-                EventBus.getDefault().post(subject.getSubject1());
+                titleAdapter.setData(subject.getSubject1());
+                titleAdapter.notifyDataSetChanged();
                 break;
             case R.id.bt2:
                 button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button2.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton1));
                 button3.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button4.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
-                EventBus.getDefault().post(subject.getSubject2());
+                titleAdapter.setData(subject.getSubject2());
+                titleAdapter.notifyDataSetChanged();
                 break;
             case R.id.bt3:
                 button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
@@ -142,15 +133,31 @@ Subject subject=new Subject();
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         TextView textView=(TextView)view.findViewById(R.id.title) ;
+        TextView textView1=(TextView)view.findViewById(R.id.kkkid);
         Intent intent1=new Intent(getActivity(), DanYuanActivity.class);
         intent1.putExtra("title",textView.getText().toString());
+        intent1.putExtra("id",Integer.parseInt(textView1.getText().toString()));
         startActivity(intent1);
     }
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        handler=new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                if(msg.what==0){
+                    titleAdapter = new TitleAdapter(getActivity(),subject.getSubject1());
+                    listView.setAdapter(titleAdapter);
+//                String a=msg.getData().getString("danyuan");
+//                subject=gson.fromJson(a,Subject.class);
+                    SYSDiaLogUtils.dismissProgress();
+                }
+                super.handleMessage(msg);
+            }
+        };
         Allshuju();
+                EventBus.getDefault().register(this);
         super.onCreate(savedInstanceState);
     }
     public void Allshuju() {
@@ -161,7 +168,9 @@ Subject subject=new Subject();
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            System.out.println("成功");
+
+                            subject=gson.fromJson(response.toString(),Subject.class);
+                            handler.sendEmptyMessage(0);
                         }
                     }, new Response.ErrorListener() {
                 @Override
