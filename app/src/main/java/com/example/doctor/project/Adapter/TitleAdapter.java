@@ -8,19 +8,22 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.doctor.R;
+import com.example.doctor.project.entity.Classify;
+
+import java.util.List;
 
 public class TitleAdapter extends BaseAdapter {
     Context context;
     TextView textView;
-    String a[];
-    public TitleAdapter(Context context1,String []c) {
+List<Classify> list;
+    public TitleAdapter(Context context1,List<Classify> list1) {
         context=context1;
-        a=c;
+       list.addAll(list1);
     }
 
     @Override
     public int getCount() {
-        return a.length;
+        return list.size();
     }
 
     @Override
@@ -37,10 +40,10 @@ public class TitleAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View view1= LayoutInflater.from(context).inflate(R.layout.timulist,null);
         textView=(TextView)view1.findViewById(R.id.title);
-        textView.setText(a[i]);
+        textView.setText(list.get(i).getClassifyname());
         return view1;
     }
-    public  void setData(String d []){
-        a=d;
+    public  void setData(List<Classify> list2){
+        list.addAll(list2);
     }
 }

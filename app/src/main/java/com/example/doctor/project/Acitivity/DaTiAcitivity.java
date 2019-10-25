@@ -82,6 +82,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     TextView danan3;
     LinearLayout ll1;
     Gson gson = new Gson();
+    TextView t1;
+    TextView t3;
+    TextView t4;
+    TextView t5;
+    ImageView n1;
+    ImageView n3;
+    ImageView n4;
+    ImageView n5;
     Result result;
     LinearLayout ll2;
     TextView jiexi;
@@ -126,6 +134,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
 
         EventBus.getDefault().register(this);
         intiview();
+        anxia();
         if (zhuangtai == 1) {
             ll1.setEnabled(false);
             ll2.setEnabled(false);
@@ -187,6 +196,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         jiexi = (TextView) findViewById(R.id.jiexi);
         xia = (LinearLayout) findViewById(R.id.xia);
         dibu4 = (LinearLayout) findViewById(R.id.dibu4);
+        t1=(TextView)findViewById(R.id.t1);
+        t3=(TextView)findViewById(R.id.t3);
+        t4=(TextView)findViewById(R.id.t4);
+        t5=(TextView)findViewById(R.id.t5);
+        n1=(ImageView)findViewById(R.id.n1);
+        n3=(ImageView)findViewById(R.id.n3);
+        n4=(ImageView)findViewById(R.id.n4);
+        n5=(ImageView)findViewById(R.id.n5);
         ll1 = (LinearLayout) findViewById(R.id.ll1);
         ll2 = (LinearLayout) findViewById(R.id.ll2);
         ll3 = (LinearLayout) findViewById(R.id.ll3);
@@ -433,9 +450,13 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
 //测试
 
     public ArrayList<Integer> getA() {
-        for (Answer answer : answerList) {
-            if(!answer.getAnswer().equals(""))
-            a.add(answer.getId());
+        for(int i=0;i<answerList.size();i++){
+            if(!answerList.get(i).getAnswer().equals("")){
+                if(!a.contains(i)){
+                    a.add(i);
+                }
+
+            }
         }
         return a;
     }
@@ -683,6 +704,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
     public void ddada(HuiFu huiFu) {
         jjj = true;
         zhuangtai = 1;
+        tupain();
         geini.setVisibility(View.VISIBLE);
         ll1.setEnabled(false);
         ll2.setEnabled(false);
@@ -692,7 +714,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         submit.setBackground(getResources().getDrawable(R.drawable.jinyong));
         kkk.setText("已经完成");
         kkk.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        tupain();
+
     }
 
     private void tupain() {
@@ -704,5 +726,66 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-
+public void anxia(){
+    pinglun.setOnTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            int action = motionEvent.getAction();
+            if (action == MotionEvent.ACTION_DOWN) {
+                // 按下  
+                t1.setTextColor(Color.parseColor("#1296db"));
+                n1.setImageResource(R.mipmap.biji1);
+            } else if (action == MotionEvent.ACTION_UP) { // 松开  
+                t1.setTextColor(Color.parseColor("#8a8a8a"));
+                n1.setImageResource(R.mipmap.biji);//  
+            }
+            return false;
+        }
+    });
+    xia.setOnTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            int action = motionEvent.getAction();
+            if (action == MotionEvent.ACTION_DOWN) {
+                // 按下  
+                t4.setTextColor(Color.parseColor("#1296db"));
+                n4.setImageResource(R.mipmap.xia1);
+            } else if (action == MotionEvent.ACTION_UP) { // 松开   
+                t4.setTextColor(Color.parseColor("#8a8a8a"));
+                n4.setImageResource(R.mipmap.xia);//  
+            }
+            return false;
+        }
+    });
+    shang.setOnTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            int action = motionEvent.getAction();
+            if (action == MotionEvent.ACTION_DOWN) {
+                // 按下  
+                t3.setTextColor(Color.parseColor("#1296db"));
+                n3.setImageResource(R.mipmap.shang1);
+            } else if (action == MotionEvent.ACTION_UP) { // 松开
+                t3.setTextColor(Color.parseColor("#8a8a8a"));
+                n3.setImageResource(R.mipmap.shang);//  //   
+            }
+            return false;
+        }
+    });
+        dibu4.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    // 按下  
+                    t5.setTextColor(Color.parseColor("#1296db"));
+                    n5.setImageResource(R.mipmap.datika1);
+                } else if (action == MotionEvent.ACTION_UP) { // 松开   
+                    t5.setTextColor(Color.parseColor("#8a8a8a"));
+                    n5.setImageResource(R.mipmap.datika);//  
+                }
+                return false;
+            }
+        });
+    }
 }

@@ -15,6 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.doctor.R;
 import com.example.doctor.project.Adapter.GridViewAdapter;
@@ -158,33 +164,34 @@ public class ZhuYe extends SupportActivity implements  View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.l1:
-                position=1;
+                position = 1;
                 EventBus.getDefault().post(new Event());
                 startWithPop(Support_Fr_1.newInstance());
                 break;
             case R.id.l2:
-                position=2;
+                position = 2;
                 EventBus.getDefault().post(new Event());
                 startWithPop(Support_Fr_2.newInstance());
                 break;
             case R.id.l3:
-                position=3;
+                position = 3;
                 EventBus.getDefault().post(new Event());
                 startWithPop(Support_Fr_3.newInstance());
                 break;
             case R.id.l4:
-                position=4;
+                position = 4;
                 EventBus.getDefault().post(new Event());
                 startWithPop(Support_Fr_4.newInstance());
                 break;
             case R.id.l5:
-                position=5;
+                position = 5;
                 EventBus.getDefault().post(new Event());
                 startWithPop(Support_Fr_5.newInstance());
                 break;
-                default:break;
+            default:
+                break;
         }
     }
 }

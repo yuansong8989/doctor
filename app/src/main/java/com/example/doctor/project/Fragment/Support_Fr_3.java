@@ -8,6 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.doctor.R;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -27,5 +33,31 @@ public class Support_Fr_3 extends SupportFragment {
         View view=inflater.inflate(R.layout.fragtwo,null);
 
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Allshuju();
+        super.onCreate(savedInstanceState);
+    }
+
+    public void Allshuju() {
+        {
+            RequestQueue queue = Volley.newRequestQueue(getActivity());
+            String url = "http://106.53.9.58:8761/subject";
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println("成功");
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("失败");
+                }
+            });
+            queue.add(stringRequest);
+        }
     }
 }

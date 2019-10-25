@@ -2,20 +2,21 @@ package com.example.doctor.project.entity;
 
 import com.example.doctor.project.Adapter.TitleAdapter;
 
+import java.util.List;
+
 public class TitEvent {
 
-private String message[];
-    public TitEvent(String b[]) {
+private List<Classify> list;
+    public TitEvent(List<Classify> list1) {
 
-        message=b;
+        list=list1;
     }
 
-
-    public String[] getMessage() {
-        return message;
+    public List<Classify> getList() {
+        return list;
     }
 
-    public void setMessage(String[] message) {
-        this.message = message;
+    public void setList(List<Classify> list) {
+        this.list = list;
     }
 }

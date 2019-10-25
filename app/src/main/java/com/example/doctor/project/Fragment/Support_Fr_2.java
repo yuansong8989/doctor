@@ -3,6 +3,8 @@ package com.example.doctor.project.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +17,32 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.doctor.R;
+import com.example.doctor.project.Acitivity.DaTiAcitivity;
 import com.example.doctor.project.Acitivity.DanYuanActivity;
 import com.example.doctor.project.Adapter.ExAdapter;
 import com.example.doctor.project.Adapter.TitleAdapter;
+import com.example.doctor.project.entity.Classify;
 import com.example.doctor.project.entity.Event;
+import com.example.doctor.project.entity.Result;
+import com.example.doctor.project.entity.Subject;
 import com.example.doctor.project.entity.TitEvent;
+import com.fingerth.supdialogutils.SYSDiaLogUtils;
+import com.google.gson.Gson;
 
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -36,16 +53,25 @@ public class Support_Fr_2 extends SupportFragment implements View.OnClickListene
     Button button3;
     Button button4;
     TitleAdapter titleAdapter;
-    String a[]={"病理学","生理学","药理学","医学微生物学","医学免疫学","医学统计学"};
-    String h[]={"内科学","外科学","妇产科学","儿科学","传染病学","神经病学学"};
-    String b[]={"预防医学"};
-    String d[]={"卫生法","医疗心里苦法","医学伦理学"};
+    Gson gson=new Gson();
+Subject subject=new Subject();
     public static Support_Fr_2 newInstance() {
         Bundle args = new Bundle();
         Support_Fr_2 fragment = new Support_Fr_2();
         fragment.setArguments(args);
         return fragment;
     }
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if(msg.what==0){
+//                String a=msg.getData().getString("danyuan");
+//                subject=gson.fromJson(a,Subject.class);
+                SYSDiaLogUtils.dismissProgress();
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Nullable
     @Override
@@ -53,11 +79,10 @@ public class Support_Fr_2 extends SupportFragment implements View.OnClickListene
         EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragtwo, null);
         listView = (ListView) view.findViewById(R.id.titlelist);
-
         intinView(view);
         button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton1));
 //        Button button=(Button)view.findViewById(R.id.bt3);
-       titleAdapter = new TitleAdapter(getActivity(),a);
+        titleAdapter = new TitleAdapter(getActivity(),subject.getSubject1());
         listView.setAdapter(titleAdapter);
         listView.setOnItemClickListener(this);
         return view;
@@ -82,35 +107,35 @@ public class Support_Fr_2 extends SupportFragment implements View.OnClickListene
                 button2.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button3.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button4.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
-                EventBus.getDefault().post(new TitEvent(a));
+                EventBus.getDefault().post(subject.getSubject1());
                 break;
             case R.id.bt2:
                 button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button2.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton1));
                 button3.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button4.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
-                EventBus.getDefault().post(new TitEvent(d));
+                EventBus.getDefault().post(subject.getSubject2());
                 break;
             case R.id.bt3:
                 button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button2.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button3.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton1));
                 button4.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
-                EventBus.getDefault().post(new TitEvent(h));
+                EventBus.getDefault().post(new TitEvent(subject.getSubject3()));
                 break;
             case R.id.bt4:
                 button1.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button2.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button3.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton2));
                 button4.setBackground(getActivity().getResources().getDrawable(R.drawable.bontton1));
-                EventBus.getDefault().post(new TitEvent(b));
+                EventBus.getDefault().post(new TitEvent(subject.getSubject4()));
                 break;
                 default:break;
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setList(TitEvent titEvent){
-        titleAdapter.setData(titEvent.getMessage());
+        titleAdapter.setData(titEvent.getList());
         titleAdapter.notifyDataSetChanged();
     }
 
@@ -121,4 +146,33 @@ public class Support_Fr_2 extends SupportFragment implements View.OnClickListene
         intent1.putExtra("title",textView.getText().toString());
         startActivity(intent1);
     }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Allshuju();
+        super.onCreate(savedInstanceState);
+    }
+    public void Allshuju() {
+        {
+            RequestQueue queue = Volley.newRequestQueue(getActivity());
+            String url = "http://106.53.9.58:8761/subject";
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println("成功");
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("失败");
+                }
+            });
+            queue.add(stringRequest);
+        }
+    }
 }
+
+
+

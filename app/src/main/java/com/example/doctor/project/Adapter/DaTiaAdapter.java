@@ -53,7 +53,7 @@ public class DaTiaAdapter extends BaseAdapter {
         textView.setText(String.valueOf(i + 1));
         if (list.size() != 0) {//表示有选择
             for (int j = 0; j < list.size(); j++) {
-                if (list.get(j) == i + 1) {
+                if (list.get(j) == i) {
                     textView.setTextColor(Color.WHITE);
                     textView.setBackground(context.getResources().getDrawable(R.drawable.dati));
                     list.remove(j);
