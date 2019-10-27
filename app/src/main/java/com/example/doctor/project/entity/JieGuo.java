@@ -3,15 +3,16 @@ package com.example.doctor.project.entity;
 import java.io.Serializable;
 
 public  class JieGuo implements Serializable {
-    private String daan;
+    private String check;
     private Integer id;
 
-    public String getDaan() {
-        return daan;
+
+    public String getCheck() {
+        return check;
     }
 
-    public void setDaan(String daan) {
-        this.daan = daan;
+    public void setCheck(String check) {
+        this.check = check;
     }
 
     public Integer getId() {

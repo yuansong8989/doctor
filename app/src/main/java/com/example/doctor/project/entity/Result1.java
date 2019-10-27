@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Result1 implements Serializable {
     private Integer grade;
-    private List<JieGuo> list;
+    private List<JieGuo> per;
 
 
     public Integer getGrade() {
@@ -16,11 +16,11 @@ public class Result1 implements Serializable {
         this.grade = grade;
     }
 
-    public List<JieGuo> getList() {
-        return list;
+    public List<JieGuo> getPer() {
+        return per;
     }
 
-    public void setList(List<JieGuo> list) {
-        this.list = list;
+    public void setPer(List<JieGuo> per) {
+        this.per = per;
     }
 }

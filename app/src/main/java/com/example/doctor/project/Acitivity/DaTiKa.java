@@ -114,10 +114,10 @@ public  void showwangge(){
         result1=(Result1)getIntent().getSerializableExtra("result");
         zongfen.setText(String.valueOf(result1.getGrade()));
         zhengque.setText(String.valueOf(result1.getGrade()/5));
-        cuowu.setText(String.valueOf(result1.getList().size()-result1.getGrade()/5));
-        daTiaAdapter = new DaTiaAdapter(this,result1.getList().size());
+        cuowu.setText(String.valueOf(result1.getPer().size()-result1.getGrade()/5));
+        daTiaAdapter = new DaTiaAdapter(this,result1.getPer().size());
         gridView.setAdapter(daTiaAdapter);
-        daTiaAdapter.setList1(result1.getList());
+        daTiaAdapter.setList1(result1.getPer());
         daTiaAdapter.notifyDataSetChanged();
         EventBus.getDefault().post(new HuiFu());
     }

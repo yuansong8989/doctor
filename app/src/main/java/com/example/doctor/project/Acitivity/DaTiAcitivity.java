@@ -336,6 +336,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 dananc.setImageResource(R.mipmap.ccc);
                 danand.setImageResource(R.mipmap.ddd);
                 setbfg(danan2, danan3, danan4);
+                if (frist == list.size() - 1) {
+                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
+                } else {
+                    problem = list.get(++frist);
+                    startView(problem);
+                    panduan();
+                    tupain();
+                }
                 break;
             case R.id.ll2:
                 if (chazzhao()) {
@@ -356,6 +364,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 danana.setImageResource(R.mipmap.aaa);
                 dananc.setImageResource(R.mipmap.ccc);
                 danand.setImageResource(R.mipmap.ddd);
+                if (frist == list.size() - 1) {
+                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
+                } else {
+                    problem = list.get(++frist);
+                    startView(problem);
+                    panduan();
+                    tupain();
+                }
                 break;
             case R.id.ll3:
                 if (chazzhao()) {
@@ -376,6 +392,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 dananb.setImageResource(R.mipmap.bbb);
                 danana.setImageResource(R.mipmap.aaa);
                 danand.setImageResource(R.mipmap.ddd);
+                if (frist == list.size() - 1) {
+                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
+                } else {
+                    problem = list.get(++frist);
+                    startView(problem);
+                    panduan();
+                    tupain();
+                }
                 break;
             case R.id.ll4:
                 if (chazzhao()) {
@@ -396,6 +420,14 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 dananb.setImageResource(R.mipmap.bbb);
                 dananc.setImageResource(R.mipmap.ccc);
                 danana.setImageResource(R.mipmap.aaa);
+                if (frist == list.size() - 1) {
+                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
+                } else {
+                    problem = list.get(++frist);
+                    startView(problem);
+                    panduan();
+                    tupain();
+                }
                 break;
             case R.id.pinglun:
                 SYSDiaLogUtils.showInfoDialog(this, "操作提示", "考试结束后才能评论!", "确定", false);
@@ -646,15 +678,10 @@ public void Allshuju(){
         new Thread() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-
-                }
                 super.run();
                 DaTiRqe daTiRqe = new DaTiRqe();
                 daTiRqe.setList(answerList);
-                String url = "http://106.53.9.58:8761/check";
+                String url = "http://106.53.9.58:8080/default/hospital/com.primeton.eos.hospital.test.biz.ext";
                 RequestQueue requestQueue = Volley.newRequestQueue(DaTiAcitivity.this);
                 System.out.println(gson.toJson(daTiRqe));
                 JsonRequest<JSONObject> jsonRequest = new JsonObjectRequest(Request.Method.POST, url, gson.toJson(daTiRqe).toString(),
@@ -718,12 +745,6 @@ public void Allshuju(){
         }.start();
     }
 
-    //初始化答案提交框
-    //赋值
-    public void setValue(Result1 result) {
-        result1 = result;
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void dhdj(IntentShi intentShi) {
         result1 = intentShi.getResult1();
@@ -750,7 +771,7 @@ public void Allshuju(){
 
     private void tupain() {
         if (jjj) {
-            if (result1.getList().get(frist).getDaan().equals("正确")) {
+            if (result1.getPer().get(frist).getCheck().equals("true")) {
                 move.setBackgroundResource(R.mipmap.dui);
             } else {
                 move.setBackgroundResource(R.mipmap.cuo);

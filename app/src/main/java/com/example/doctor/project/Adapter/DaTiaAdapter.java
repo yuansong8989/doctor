@@ -63,7 +63,7 @@ public class DaTiaAdapter extends BaseAdapter {
         }else{
             if(answers.size()!=0){
                 for (int j = 0; j < answers.size(); j++) {
-                    if (answers.get(i).getDaan().equals("正确")) {
+                    if (answers.get(i).getCheck().equals("true")) {
                         textView.setTextColor(Color.WHITE);
                         textView.setBackground(context.getResources().getDrawable(R.drawable.zhengque));
                     } else {
