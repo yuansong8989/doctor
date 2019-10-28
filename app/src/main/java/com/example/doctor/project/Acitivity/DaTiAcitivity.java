@@ -156,6 +156,21 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
         handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
+                if(msg.what==10){
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+
+                    }
+                    if (frist == list.size() - 1) {
+                        SYSDiaLogUtils.showInfoDialog(DaTiAcitivity.this, "已经是最后一题了", "很抱歉", "确定", false);
+                    } else {
+                        problem = list.get(++frist);
+                        startView(problem);
+                        panduan();
+                        tupain();
+                    }
+                }
                 if (msg.what == 2) {
                     SYSDiaLogUtils.dismissProgress();
                     Intent intent1 = new Intent(DaTiAcitivity.this, DaTiKa.class);
@@ -336,14 +351,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 dananc.setImageResource(R.mipmap.ccc);
                 danand.setImageResource(R.mipmap.ddd);
                 setbfg(danan2, danan3, danan4);
-                if (frist == list.size() - 1) {
-                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
-                } else {
-                    problem = list.get(++frist);
-                    startView(problem);
-                    panduan();
-                    tupain();
-                }
+                handler.sendEmptyMessage(10);
                 break;
             case R.id.ll2:
                 if (chazzhao()) {
@@ -364,14 +372,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 danana.setImageResource(R.mipmap.aaa);
                 dananc.setImageResource(R.mipmap.ccc);
                 danand.setImageResource(R.mipmap.ddd);
-                if (frist == list.size() - 1) {
-                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
-                } else {
-                    problem = list.get(++frist);
-                    startView(problem);
-                    panduan();
-                    tupain();
-                }
+                handler.sendEmptyMessage(10);
                 break;
             case R.id.ll3:
                 if (chazzhao()) {
@@ -392,14 +393,7 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 dananb.setImageResource(R.mipmap.bbb);
                 danana.setImageResource(R.mipmap.aaa);
                 danand.setImageResource(R.mipmap.ddd);
-                if (frist == list.size() - 1) {
-                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
-                } else {
-                    problem = list.get(++frist);
-                    startView(problem);
-                    panduan();
-                    tupain();
-                }
+                handler.sendEmptyMessage(10);
                 break;
             case R.id.ll4:
                 if (chazzhao()) {
@@ -420,14 +414,9 @@ public class DaTiAcitivity extends AppCompatActivity implements View.OnClickList
                 dananb.setImageResource(R.mipmap.bbb);
                 dananc.setImageResource(R.mipmap.ccc);
                 danana.setImageResource(R.mipmap.aaa);
-                if (frist == list.size() - 1) {
-                    SYSDiaLogUtils.showInfoDialog(this, "已经是最后一题了", "很抱歉", "确定", false);
-                } else {
-                    problem = list.get(++frist);
-                    startView(problem);
-                    panduan();
-                    tupain();
-                }
+
+                handler.sendEmptyMessage(10);
+
                 break;
             case R.id.pinglun:
                 SYSDiaLogUtils.showInfoDialog(this, "操作提示", "考试结束后才能评论!", "确定", false);
@@ -655,7 +644,7 @@ public void Allshuju(){
     }
 
     private void submit() {
-        if (answerList.size() != list.size()) {
+        if (!zifuchuan()) {
             SYSDiaLogUtils.showConfirmDialog(this, true, SYSDiaLogUtils.SYSConfirmType.Tip, "警告", "你还有未完成的习题，确定提交？", new SYSDiaLogUtils.ConfirmDialogListener() {
                 @Override
                 public void onClickButton(boolean clickLeft, boolean clickRight) {
@@ -669,9 +658,16 @@ public void Allshuju(){
         } else {
             //提交
             rtShuju();
-
         }
     }
+public boolean zifuchuan(){
+        for(Answer answer:answerList){
+            if(answer.getAnswer().equals("")){
+                return false;
+            }
+        }
+        return true;
+}
 
     public void rtShuju() {
         SYSDiaLogUtils.showProgressDialog(DaTiAcitivity.this, SYSDiaLogUtils.SYSDiaLogType.IosType, "请稍后...", false, null);
@@ -689,7 +685,6 @@ public void Allshuju(){
                             @Override
                             public void onResponse(JSONObject response) {
                                 EventBus.getDefault().post(new IntentShi(gson.fromJson(response.toString(), Result1.class)));
-
                             }
                         }, new Response.ErrorListener() {
                     @Override
