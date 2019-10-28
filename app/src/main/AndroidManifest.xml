@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
+        android:usesCleartextTraffic="true"
         android:name=".project.AppApplication"
         android:allowBackup="true"
         android:icon="@drawable/doctor"
